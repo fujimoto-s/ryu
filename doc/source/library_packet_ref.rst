@@ -148,7 +148,11 @@ Protocol Header classes
 
 .. autoclass:: ryu.lib.packet.bgp.FlowSpecIPv4NLRI
    :members:
+.. autoclass:: ryu.lib.packet.bgp.FlowSpecIPv6NLRI
+   :members:
 .. autoclass:: ryu.lib.packet.bgp.FlowSpecVPNv4NLRI
+   :members:
+.. autoclass:: ryu.lib.packet.bgp.FlowSpecVPNv6NLRI
    :members:
 .. autoclass:: ryu.lib.packet.bgp.BGPFlowSpecTrafficRateCommunity
    :members:
