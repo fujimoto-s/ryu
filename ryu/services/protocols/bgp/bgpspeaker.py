@@ -57,6 +57,7 @@ from ryu.services.protocols.bgp.api.prefix import (
 from ryu.services.protocols.bgp.api.prefix import (
     FLOWSPEC_FAMILY,
     FLOWSPEC_FAMILY_IPV4,
+    FLOWSPEC_FAMILY_IPV6,
     FLOWSPEC_FAMILY_VPNV4,
     FLOWSPEC_RULES,
     FLOWSPEC_ACTIONS)
