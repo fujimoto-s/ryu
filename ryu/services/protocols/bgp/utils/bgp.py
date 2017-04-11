@@ -29,7 +29,9 @@ from ryu.lib.packet.bgp import (
     RF_IPv6_VPN,
     RF_L2_EVPN,
     RF_IPv4_FLOWSPEC,
+    RF_IPv6_FLOWSPEC,
     RF_VPNv4_FLOWSPEC,
+    RF_VPNv6_FLOWSPEC,
     RF_RTC_UC,
     RouteTargetMembershipNLRI,
     BGP_ATTR_TYPE_MULTI_EXIT_DISC,
@@ -55,7 +57,9 @@ from ryu.services.protocols.bgp.info_base.vpnv4 import Vpnv4Path
 from ryu.services.protocols.bgp.info_base.vpnv6 import Vpnv6Path
 from ryu.services.protocols.bgp.info_base.evpn import EvpnPath
 from ryu.services.protocols.bgp.info_base.ipv4fs import IPv4FlowSpecPath
+from ryu.services.protocols.bgp.info_base.ipv6fs import IPv6FlowSpecPath
 from ryu.services.protocols.bgp.info_base.vpnv4fs import VPNv4FlowSpecPath
+from ryu.services.protocols.bgp.info_base.vpnv6fs import VPNv6FlowSpecPath
 
 
 LOG = logging.getLogger('utils.bgp')
@@ -67,7 +71,9 @@ _ROUTE_FAMILY_TO_PATH_MAP = {RF_IPv4_UC: Ipv4Path,
                              RF_IPv6_VPN: Vpnv6Path,
                              RF_L2_EVPN: EvpnPath,
                              RF_IPv4_FLOWSPEC: IPv4FlowSpecPath,
+                             RF_IPv6_FLOWSPEC: IPv6FlowSpecPath,
                              RF_VPNv4_FLOWSPEC: VPNv4FlowSpecPath,
+                             RF_VPNv6_FLOWSPEC: VPNv6FlowSpecPath,
                              RF_RTC_UC: RtcPath}
 
 
@@ -199,6 +205,44 @@ def create_v4flowspec_actions(actions=None):
     Flow Specification as a dictionary type value.
 
     Returns a list of extended community values.
+    """
+    from ryu.services.protocols.bgp.api.prefix import (
+        FLOWSPEC_ACTION_TRAFFIC_RATE,
+        FLOWSPEC_ACTION_TRAFFIC_ACTION,
+        FLOWSPEC_ACTION_REDIRECT,
+        FLOWSPEC_ACTION_TRAFFIC_MARKING,
+    )
+
+    # Supported action type for IPv4 and VPNv4.
+    action_types = {
+        FLOWSPEC_ACTION_TRAFFIC_RATE: BGPFlowSpecTrafficRateCommunity,
+        FLOWSPEC_ACTION_TRAFFIC_ACTION: BGPFlowSpecTrafficActionCommunity,
+        FLOWSPEC_ACTION_REDIRECT: BGPFlowSpecRedirectCommunity,
+        FLOWSPEC_ACTION_TRAFFIC_MARKING: BGPFlowSpecTrafficMarkingCommunity,
+    }
+
+    communities = []
+
+    if actions is None:
+        return communities
+
+    for name, action in actions.items():
+        cls_ = action_types.get(name, None)
+        if cls_:
+            communities.append(cls_(**action))
+        else:
+            raise ValueError(
+                'Unsupported flowspec action %s' % name)
+
+    return communities
+
+
+def create_v6flowspec_actions(actions=None):
+    """
+    Create list of traffic filtering actions
+    for Ipv6 Flow Specification and VPNv6 Flow Specification.
+
+    "FLOWSPEC_ACTION_REDIRECT_IPV6" is not implemented yet.
     """
     from ryu.services.protocols.bgp.api.prefix import (
         FLOWSPEC_ACTION_TRAFFIC_RATE,
