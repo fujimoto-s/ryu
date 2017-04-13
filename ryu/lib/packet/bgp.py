@@ -2661,11 +2661,11 @@ class _FlowSpecOperatorBase(_FlowSpecComponentBase):
         return cls(operator, value), rest
 
     def serialize_body(self):
-        length = (self.value.bit_length() + 7) // 8 or 1
-        self.operator |= int(math.log(length, 2)) << 4
+        length = max((self.value.bit_length() + 7) // 8 - 1, 0)
+        self.operator |= length << 4
         buf = struct.pack(self._OPE_PACK_STR, self.operator)
-        value_type = type_desc.IntDescr(length)
-        buf += struct.pack(self._VAL_PACK_STR % length,
+        value_type = type_desc.IntDescr(1 << length)
+        buf += struct.pack(self._VAL_PACK_STR % (1 << length),
                            value_type.from_user(self.value))
 
         return buf
