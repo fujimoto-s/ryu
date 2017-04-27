@@ -191,7 +191,13 @@ class DockerImage(object):
         return tagname
 
     def create_ryu(self, tagname='ryu', image=None, check_exist=False):
+        print("========= images and pa ==================")
+        out = self.cmd.sudo('sudo docker images')
+        print(out)
+        ps = self.cmd.sudo('sudo docker ps')
+        print(ps)
         if check_exist and self.exist(tagname):
+            print("yeaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
             return tagname
         workdir = os.path.join(TEST_BASE_DIR, tagname)
         workdir_ctn = '/root/osrg/ryu'
