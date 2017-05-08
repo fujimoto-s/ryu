@@ -29,6 +29,7 @@ LOG = logging.getLogger('ryu.lib.hub')
 
 if HUB_TYPE == 'eventlet':
     import eventlet
+    eventlet.sleep()
     import eventlet.event
     import eventlet.queue
     import eventlet.semaphore
