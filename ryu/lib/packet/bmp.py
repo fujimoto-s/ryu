@@ -208,7 +208,7 @@ class BMPPeerMessage(BMPMessage):
         if peer_flags & (1 << 7):
             peer_address = addrconv.ipv6.bin_to_text(peer_address)
         else:
-            peer_address = addrconv.ipv4.bin_to_text(peer_address[:4])
+            peer_address = addrconv.ipv4.bin_to_text(peer_address[-4:])
 
         peer_bgp_id = addrconv.ipv4.bin_to_text(peer_bgp_id)
 
@@ -234,7 +234,7 @@ class BMPPeerMessage(BMPMessage):
             flags |= (1 << 7)
             peer_address = addrconv.ipv6.text_to_bin(self.peer_address)
         else:
-            peer_address = addrconv.ipv4.text_to_bin(self.peer_address)
+            peer_address = b'\x00' * 12 + addrconv.ipv4.text_to_bin(self.peer_address)
 
         peer_bgp_id = addrconv.ipv4.text_to_bin(self.peer_bgp_id)
 
