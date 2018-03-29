@@ -46,6 +46,8 @@ class openflow(packet_base.PacketBase):
         from ryu.ofproto import ofproto_protocol
 
         (version, msg_type, msg_len, xid) = ofproto_parser.header(buf)
+        if version not in ofproto_protocol._versions or msg_len > len(buf):
+            raise struct.error
 
         msg_parser = ofproto_parser._MSG_PARSERS.get(version)
         if msg_parser is None:

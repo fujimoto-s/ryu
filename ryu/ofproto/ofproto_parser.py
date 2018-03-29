@@ -36,7 +36,8 @@ if six.PY3:
 
 
 def header(buf):
-    assert len(buf) >= ofproto_common.OFP_HEADER_SIZE
+    if len(buf) < ofproto_common.OFP_HEADER_SIZE:
+        raise struct.error
     # LOG.debug('len %d bufsize %d', len(buf), ofproto.OFP_HEADER_SIZE)
     return struct.unpack_from(ofproto_common.OFP_HEADER_PACK_STR,
                               six.binary_type(buf))
