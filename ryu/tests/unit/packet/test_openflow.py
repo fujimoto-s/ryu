@@ -45,7 +45,6 @@ class Test_openflow(unittest.TestCase):
         files = [
             'openflow_flowmod',
             'openflow_flowstats_req',
-            'openflow_invalid_version',
         ]
 
         for f in files:
