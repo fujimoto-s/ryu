@@ -2325,7 +2325,8 @@ class Peer(Source, Sink, NeighborConfListener, Activity):
         )
         self.state.bgp_state = const.BGP_FSM_IDLE
         if self._protocol:
-            self._protocol.stop()
+            if self._protocol._started:
+                self._protocol.stop()
             self._protocol = None
             # Create new collection for initial RT NLRIs
             self._init_rtc_nlri_path = []
